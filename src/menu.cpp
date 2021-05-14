@@ -1,92 +1,88 @@
 /**
- * @file elip.cpp
+ * @file menu.cpp
  * @author Eric Dürr (eric.durr.20@ull.edu.es)
- * @brief Elliptic curve criptography based on ElGamal and Diffie-Hellman algorithms.
- *          -> The Elyptic curve type is: Y^2=X^3+aX+b
+ * @brief
  * @version 0.1
  * @date 2021-05-09
  * 
  * @copyright Copyright (c) 2021
  * 
  */
-#include "../include/ecc.h"
-#include <vector>
+#include "../include/vigenere_simulation.h"
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
-     if (int flag = filter(argc, argv) != 0)
+     while (1)
      {
-          return flag;
+          int opt = -1;
+          std::cout << "--- P11 | MENÚ DE PRÁCTICAS DE ENCRIPTACIÓN ---\n";
+          std::cout << "\n";
+          std::cout << "Simulaciones disponibles:"
+                    << "\n"
+                    << "\t 1.- Cifrado de Vigenere\n"
+                    << "\t 2.- Cifrado RC4\n"
+                    << "\t 3.- Cifrado ChaCha20\n"
+                    << "\t 4.- Generador C/A de GPS\n"
+                    << "\t 5.- Multiplicación en SNOW 3G y AES\n"
+                    << "\t 6.- Cifrado AES\n"
+                    << "\t 7.- Cifrado en bloque CBC\n"
+                    << "\t 8.- Cifrado ElGamal\n"
+                    << "\t 9.- Cifrado RSA\n"
+                    << "\t 10.- Cifrado Diffie-Hellman y ElGamal Elípticos\n"
+                    << "\t 11.- Protocolo Feige-Fiat-Shamir\n";
+          std::cout << "Introduzca la opción a elegir, 0 para salir: ";
+          std::cin >> opt;
+
+          if (opt == 0)
+               return 0;
+
+          switch (opt)
+          {
+          case 1:
+               vigenere();
+               /* code */
+               break;
+          case 2:
+               /* code */
+               break;
+          case 3:
+               /* code */
+               break;
+          case 4:
+               /* code */
+               break;
+          case 5:
+               /* code */
+               break;
+          case 6:
+               /* code */
+               break;
+          case 7:
+               /* code */
+               break;
+          case 8:
+               /* code */
+               break;
+          case 9:
+               /* code */
+               break;
+          case 10:
+               /* code */
+               break;
+          case 11:
+               /* code */
+               break;
+
+          default:
+               std::cout << "ERROR: opción escogida no es válida ...\n";
+               break;
+          }
+          getchar();
+          std::cout << "\n\t\t-Pulse ENTER para continuar-";
+          getchar();
+          system("clear");
      }
-     std::cout << "--- ElGamal and Diffie-Hellman based elliptic encryption ---\n";
-
-     std::cout << "Generating introduced values...\n";
-     long p = std::stoi(argv[1]);
-     if (!is_prime(p))
-     {
-          std::cout << "ERROR: number p (modulo) must be a prime number,introduced p=" << p << " please retry with a prime number\n";
-          return 1;
-     }
-     long a = std::stoi(argv[2]);
-     long b = std::stoi(argv[3]);
-
-     if (a <= 0 || a >= p)
-     {
-          std::cout << "ERROR: <a> must be a number between 0 and p=" << p << "  reatry with a number on the boundry\n";
-          return 1;
-     }
-     if (b <= 0 || b >= p)
-     {
-          std::cout << "ERROR: <b> must be a number between 0 and p=" << p << "  reatry with a number on the boundry\n";
-          return 1;
-     }
-     std::pair<long, long> base = parse_point(argv[4]);
-     long db = std::stoi(argv[5]);
-     long da = std::stoi(argv[6]);
-     long msg = std::stoi(argv[7]);
-     std::cout
-         << "p=" << p << "\n"
-         << "a=" << a << "\n"
-         << "b=" << b << "\n"
-         << "G="
-         << "(" << base.first << "," << base.second << ")\n"
-         << "db=" << da << "\n"
-         << "da=" << db << "\n"
-         << "Plain text msg=" << msg << "\n";
-     std::cout << "\nOperating over elliptic curve:  y^2 (mod " << p << ") = x^3 + " << a << "*x + " << b << "(mod " << p << ")\n\n";
-     std::cout << "Generating E curve points...\n";
-
-     std::vector<std::pair<long, long>> e_points = extract_points(p, a, b);
-     std::cout << "E curve points: ";
-     for (auto point : e_points)
-          std::cout << "(" << point.first << "," << point.second << ") ";
-     std::cout << "\n";
-     std::cout << "Generating public keys for Bob and Alice...\n";
-     std::pair<long, long> pub_b = pubkey(db, base, a, p);
-     std::pair<long, long> pub_a = pubkey(da, base, a, p);
-
-     std::cout << "dbG=(" << pub_b.first << "," << pub_b.second << ")\n";
-     std::cout << "daG=(" << pub_a.first << "," << pub_a.second << ")\n";
-
-     std::cout << "Generating private keys for Bob and Alice...\n";
-     std::pair<long, long> shared_a = shkey(da, pub_b, a, p);
-     std::pair<long, long> shared_b = shkey(db, pub_a, a, p);
-
-     std::cout << db << "*(" << pub_a.first << "," << pub_a.second << ") = (" << shared_b.first << "," << shared_b.second << ")\n";
-
-     std::cout << da << "*(" << pub_b.first << "," << pub_b.second << ") = (" << shared_a.first << "," << shared_a.second << ")\n";
-
-     std::cout << "Ciphering message process...\n";
-     long M = great_strict_pow(msg);
-     long h = p / M;
-     std::cout << "M=" << M << "\n";
-     std::cout << "h=" << p << "/" << M << "=" << h << "\n";
-     std::pair<long, long> msg_point = msg_2_point(msg, h, M, e_points);
-     std::cout << "plain text msg as point: Qm=(" << msg_point.first << "," << msg_point.second << ")\n";
-     std::cout << "Ciphered message and public key sent from Allice to Bob: \n";
-     std::pair<long, long> c_msg = add_points(msg_point, shared_a, a, p);
-
-     std::cout << "{ Ciphered message: (" << c_msg.first << "," << c_msg.second << ") ; Public shared key: (" << pub_a.first << "," << pub_a.second << ")}\n";
 
      return 0;
 }
