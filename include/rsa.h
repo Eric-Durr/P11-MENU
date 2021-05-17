@@ -47,7 +47,8 @@ unsigned pos_in_aplh(const std::string &character)
 void to_upper(std::string &str)
 {
   std::transform(str.begin(), str.end(), str.begin(),
-                 [](unsigned char c) { return toupper(c); });
+                 [](unsigned char c)
+                 { return toupper(c); });
 }
 
 long block_sz(const long &n)

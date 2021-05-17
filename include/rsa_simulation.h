@@ -1,16 +1,20 @@
 #include <iostream>
 #include "rsa.h"
 
-int rsa(long argc, char *argv[])
+void rsa(void)
 {
-     if (filter(argc, argv) != 0)
-          return 1;
 
-     std::cout << "\n----SIMULADOR DE CIFRADO RSA-----\n\n";
-     std::cout << "Parámetros longroducidos:\n";
-     long p = std::stoi(argv[1]);
-     long q = std::stoi(argv[2]);
-     long d = std::stoi(argv[3]);
+     std::cout << "\n\n----SIMULADOR DE CIFRADO RSA-----\n\n";
+     std::cout << "Introduzca el número primo p como valor entero positivo:";
+     long p;
+     std::cin >> p;
+     std::cout << "Introduzca el número primo q como valor entero positivo:";
+     long q;
+     std::cin >> q;
+
+     std::cout << "Introduzca el número primo d como un valor entero positivo:";
+     long d;
+     std::cin >> d;
      std::cout << "P=" << p << "\n"
                << "q=" << q << "\n"
                << "d=" << d << "\n\n";
@@ -24,14 +28,14 @@ int rsa(long argc, char *argv[])
           }
           else
           {
-               std::cout << "q=" << q << " no es primo, cancelando el cifrado...\n";
-               return 3;
+               std::cout << "q=" << q << " no es primo, cancelando el cifrado\n";
+               return;
           }
      }
      else
      {
-          std::cout << "p=" << p << " no es primo, cancelando el cifrado...\n";
-          return 2;
+          std::cout << "p=" << p << " no es primo, cancelando el cifrado\n";
+          return;
      }
 
      std::cout << "Calculando n y phi(n) ...\n";
@@ -43,18 +47,19 @@ int rsa(long argc, char *argv[])
 
      if (gcd(d, phi) != 1)
      {
-          std::cout << "No se cumple que d=" << d << " sea primo con phi(n)=" << phi << ", cancelando cifrado ...\n";
-          return 4;
+          std::cout << "No se cumple que d=" << d << " sea primo con phi(n)=" << phi << ", cancelando cifrado \n";
+          return;
      }
      else
      {
-          std::cout << "d=" << d << " es primo con phi(n)=" << phi << ", se procede con el cifrado ...\n";
+          std::cout << "d=" << d << " es primo con phi(n)=" << phi << ", se procede con el cifrado \n";
      }
      long e = mod_mult_inv(d, phi);
      std::cout << "Valor de clave de cifrado e=" << e << "\n";
 
      char cmsg[1000];
      std::cout << "Introduzca el mensaje a cifrar: ";
+     getchar();
      std::cin.getline(cmsg, 1000);
      std::string msg = cmsg;
      to_upper(msg);
@@ -71,5 +76,6 @@ int rsa(long argc, char *argv[])
      std::cout << "Bloques decimales cifrados: ";
      for (auto element : cblocks)
           std::cout << element << " ";
-     std::cout << "\n";
+
+     return;
 }

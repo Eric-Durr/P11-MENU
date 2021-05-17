@@ -16,6 +16,8 @@
 #include "../include/aes_simulation.h"
 #include "../include/cbc_simulation.h"
 #include "../include/gamal_simulation.h"
+#include "../include/rsa_simulation.h"
+#include "../include/ecc_simulation.h"
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -79,9 +81,11 @@ int main(int argc, char *argv[])
                /* code */
                break;
           case 9:
+               rsa();
                /* code */
                break;
           case 10:
+               ecc();
                /* code */
                break;
           case 11:
