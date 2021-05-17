@@ -9,6 +9,9 @@
  * 
  */
 #include "../include/vigenere_simulation.h"
+#include "../include/rc4_simulation.h"
+#include "../include/chacha20_simulation.h"
+#include "../include/ca_gps_simulation.h"
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -44,12 +47,15 @@ int main(int argc, char *argv[])
                /* code */
                break;
           case 2:
+               rc4();
                /* code */
                break;
           case 3:
+               chacha20();
                /* code */
                break;
           case 4:
+               ca_gps();
                /* code */
                break;
           case 5:

@@ -13,17 +13,50 @@
 #include <iostream>
 #include <regex>
 #include "chacha20.h"
-int chacha_20_simulation()
+void chacha20()
 {
 
+    std::cout << "\n\n--CIFRADO EN FLUJO RC4--\n\n";
+    std::cout << "Introduzca el texto original de 128 bits en forma de 4 palabras en hexadecimal:\n";
+    std::vector<std::string> word;
+    for (int i = 0; i < 4; ++i)
+    {
+        std::string aux;
+        std::cout << "Cifra hexadecimal " << i + 1 << ": ";
+        std::cin >> aux;
+        word.push_back(aux);
+    }
+    std::cout << "Introduzca la clave de 256 bits en forma de 8 palabras en hexadecimal:\n";
+    std::vector<std::string> key;
+    for (int i = 0; i < 8; ++i)
+    {
+        std::string aux;
+        std::cout << "Cifra hexadecimal " << i + 1 << ": ";
+        std::cin >> aux;
+        key.push_back(aux);
+    }
+    std::cout << "Introduzca los 32 bits de contador:";
+    std::string ctr;
+    std::cout << "Cifra hexadecimal: ";
+    std::cin >> ctr;
+
+    std::cout << "Introduzca el nonce  de 96 bits en forma de 3 palabras en hexadecimal:\n";
+    std::vector<std::string> nonce;
+    for (int i = 0; i < 3; ++i)
+    {
+        std::string aux;
+        std::cout << "Cifra hexadecimal " << i + 1 << ": ";
+        std::cin >> aux;
+        nonce.push_back(aux);
+    }
     std::vector<std::string> in = {
         // 128b Word
-        "61707865", "3320646e", "79622d32", "6b206574",
+        word[0], word[1], word[2], word[3],
         // 256 Key
-        "0e99a397", "3c53eb1b", "e2426bad", "2f312d24",
-        "d9c2762b", "535e14d7", "8e1775a9", "453a68a5",
+        key[0], key[1], key[2], key[3],
+        key[4], key[5], key[6], key[7],
         // 32b Counter and 96b nonce
-        "01000000", "b69edeac", "73ee4405", "d3fa9a8e"};
+        ctr, nonce[0], nonce[1], nonce[2]};
 
     std::vector<std::string> out;
 

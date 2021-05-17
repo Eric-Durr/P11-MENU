@@ -125,7 +125,6 @@ void vigenere(void)
 
         std::cout << "\n\t\tPulse enter para continuar...";
         getchar();
-        getchar();
         //system("clear");
     }
 }
