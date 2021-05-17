@@ -18,6 +18,7 @@
 #include "../include/gamal_simulation.h"
 #include "../include/rsa_simulation.h"
 #include "../include/ecc_simulation.h"
+#include "../include/feige_fiat_shamir.h"
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -89,6 +90,7 @@ int main(int argc, char *argv[])
                /* code */
                break;
           case 11:
+               ffs();
                /* code */
                break;
 
