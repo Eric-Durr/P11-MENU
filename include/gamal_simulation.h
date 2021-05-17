@@ -1,26 +1,34 @@
 #include "el_gamal.h"
-int gamal(long argc, char *argv[])
+void elgamal()
 {
-  int flag = filter(argc, argv);
-  if (flag != 0)
-  {
-    return flag;
-  }
 
-  unsigned p = static_cast<unsigned>(stoi(std::string{argv[1]})),
-           a = static_cast<unsigned>(stoi(std::string{argv[2]})),
-           k = static_cast<unsigned>(stoi(std::string{argv[3]})),
-           x = static_cast<unsigned>(stoi(std::string{argv[4]})),
-           plaintxt = static_cast<unsigned>(stoi(std::string{argv[5]})),
-           ciphertxt, Ka, Ya, Kb, Yb, invK, decipheredtxt;
-
+  std::cout << "\n\n--- CIFRADO DE INTERCAMBIO DE CLAVES - ELGAMAL ---\n\n";
+  std::cout << "Introduzca el número primo p (módulo) como número entero positivo: ";
+  unsigned p;
+  std::cin >> p;
   if (!is_prime(p))
   {
     std::cout << "p debe ser un número primo, terminando el programa\n";
-    return 2;
+    return;
   }
 
-  std::cout << "\nCIFRADO DE INTERCAMBIO DE CLAVES - ELGAMAL\n";
+  std::cout << "Introduzca el valor de a (base de Allice) como número entero positivo: ";
+  unsigned a;
+  std::cin >> a;
+
+  std::cout << "Introduzca el valor de k (secreto de Allice) como número entero positivo: ";
+  unsigned k;
+  std::cin >> k;
+
+  std::cout << "Introduzca el valor de x (secreto de Bob) como número entero positivo: ";
+  unsigned x;
+  std::cin >> x;
+
+  std::cout << "Introduzca el valor del mensaje original como valor entero positivo: ";
+  unsigned plaintxt;
+  std::cin >> plaintxt;
+
+  unsigned ciphertxt, Ka, Ya, Kb, Yb, invK, decipheredtxt;
 
   // Create Alice private key
   Ya = f_exp(a, k, p);
@@ -37,7 +45,7 @@ int gamal(long argc, char *argv[])
   else
   {
     std::cout << "Error durante la creación de las claves \n";
-    return 3;
+    return;
   }
 
   //Modular multiplicative inverse:
@@ -58,5 +66,4 @@ int gamal(long argc, char *argv[])
             << invK
             << ", M=" << decipheredtxt
             << "\n";
-  return 0;
 }

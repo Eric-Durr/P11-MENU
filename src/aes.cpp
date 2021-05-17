@@ -1,7 +1,28 @@
 #include <sstream>
 
 #include "../include/aes.h"
-#include "../include/binary_mult.h"
+/*!
+ * @brief Compact GF(2^8) multiplication function for AES
+ *
+ * @returns the 8 bits of the resultant multiplication between the given numbers.
+ * */
+uint8_t aes_multiply(uint8_t a, uint8_t b)
+{
+  uint8_t p = 0;
+  uint8_t carry;
+  int i;
+  for (i = 0; i < 8; i++)
+  {
+    if (b & 1)
+      p ^= a;
+    carry = a & 0x80;
+    a = a << 1;
+    if (carry)
+      a ^= 0x1b;
+    b = b >> 1;
+  }
+  return p;
+}
 
 AES_128::AES_128(const byte_grid_t &block, const byte_grid_t &input_key)
 {
@@ -41,7 +62,7 @@ byte_grid_t AES_128::generate(const bool &snitch)
   output = this->add_round_key(this->shift_rows(this->subs_bytes(output)), this->round_key_[10]);
   if (snitch)
   {
-    std::cout << "LAP " << 10 << ":\n";
+    std::cout << "LAP " << std::to_string(10) << ":\n";
     std::cout << "R10 (Subclave =" << this->grid_to_s(this->round_key_[10])
               << ") = " << this->grid_to_s(output) << "\n";
     std::cout << "Bloque de texto cifrado: " << this->grid_to_s(output) << "\n";
@@ -146,10 +167,10 @@ byte_grid_t AES_128::mix_column(const byte_grid_t &grid)
   for (int i = 0; i < 4; ++i)
   {
 
-    out[0][i] = gf2n_multiply(0x02, grid[0][i]) ^ gf2n_multiply(0x03, grid[1][i]) ^ grid[2][i] ^ grid[3][i];
-    out[1][i] = grid[0][i] ^ gf2n_multiply(0x02, grid[1][i]) ^ gf2n_multiply(0x03, grid[2][i]) ^ grid[3][i];
-    out[2][i] = grid[0][i] ^ grid[1][i] ^ gf2n_multiply(0x02, grid[2][i]) ^ gf2n_multiply(0x03, grid[3][i]);
-    out[3][i] = gf2n_multiply(0x03, grid[0][i]) ^ grid[1][i] ^ grid[2][i] ^ gf2n_multiply(0x02, grid[3][i]);
+    out[0][i] = aes_multiply(0x02, grid[0][i]) ^ aes_multiply(0x03, grid[1][i]) ^ grid[2][i] ^ grid[3][i];
+    out[1][i] = grid[0][i] ^ aes_multiply(0x02, grid[1][i]) ^ aes_multiply(0x03, grid[2][i]) ^ grid[3][i];
+    out[2][i] = grid[0][i] ^ grid[1][i] ^ aes_multiply(0x02, grid[2][i]) ^ aes_multiply(0x03, grid[3][i]);
+    out[3][i] = aes_multiply(0x03, grid[0][i]) ^ grid[1][i] ^ grid[2][i] ^ aes_multiply(0x02, grid[3][i]);
   }
 
   return out;
@@ -170,7 +191,7 @@ byte_grid_t AES_128::add_round_key(const byte_grid_t &grid, const byte_grid_t &k
   {
     std::vector<uint8_t> aux_line;
     for (int j = 0; j < 4; ++j)
-      aux_line.push_back(byte_add(grid[i][j], key[i][j]));
+      aux_line.push_back((grid[i][j] ^ key[i][j]));
     out.push_back(aux_line);
   }
 

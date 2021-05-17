@@ -3,43 +3,38 @@
 #include <sstream>
 #include <stdio.h>
 #include <stdint.h>
+#include <regex>
 #include "s_box.h"
 
 /**
  * @brief Checks the program command line input. If the input is the desired returns 0
  * and the main program can proceed.
  * 
- * @param argc 
- * @param argv 
+ * @param input
  * @return int 
  */
 
-int filter(int argc, char *argv[])
+#ifndef AES_FUNCTIONS_CHECK_H__
+#define AES_FUNCTIONS_CHECK_H__
+
+int check(const std::string &input)
 {
 
-  if (argc < 3)
+  if (input.size() != 32)
   {
-    std::cout << "ERROR: missing input arguments\n";
-    std::cout << "USAGE: " << argv[0] << " <hex_key_grid_string> <hex_input_grid_string> [trace]\n";
+    std::cout << "ERROR: la cadena debe componerse por 32 cifras hexadecimales\n";
     return 1;
-  }
-  if (std::string{argv[1]}.size() != 32)
-  {
-    std::cout << "ERROR: wrong Key string , must contain 16 hex numbers\n";
-    std::cout << "USAGE: " << argv[0] << " <hex_key_grid_string> <hex_input_grid_string> [trace]\n";
-    return 2;
-  }
-  if (std::string{argv[2]}.size() != 32)
-  {
-    std::cout << "ERROR: wrong input string , must contain 16 hex numbers\n";
-    std::cout << "USAGE: " << argv[0] << " <hex_key_grid_string> <hex_input_grid_string> [trace]\n";
-    return 3;
   }
 
   /* CASES */
 
   return 0;
 }
+
+#endif
+
+#ifndef AES_FUNCTIONS_PRINT_H__
+#define AES_FUNCTIONS_PRINT_H__
 
 void print_grid(const byte_grid_t &grid)
 {
@@ -51,6 +46,11 @@ void print_grid(const byte_grid_t &grid)
     std::cout << "\n";
   }
 }
+
+#endif
+
+#ifndef AES_FUNCTIONS_PARSE_H__
+#define AES_FUNCTIONS_PARSE_H__
 
 byte_grid_t parse_grid(const std::string &input)
 {
@@ -77,3 +77,5 @@ byte_grid_t parse_grid(const std::string &input)
 
   return output;
 }
+
+#endif

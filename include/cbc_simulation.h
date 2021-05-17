@@ -1,45 +1,61 @@
-#include "../include/cbc_simulator.h"
+#include "../include/aes_functions.h"
 #include "../include/aes.h"
 
 byte_grid_t CBC_XOR(const byte_grid_t &plaintext, const byte_grid_t &element, const bool &trace = false);
 
-int cbc(int argc, char *argv[])
+void cbc(void)
 {
-  int flag = filter(argc, argv);
-  if (flag != 0)
+
+  std::cout << "\n--- Encriptado CBC con AES de 128 b ---\n";
+
+  std::cout << "Introduzca el vector de inicialización como secuencia de cifras decimales: ";
+  std::string str_iv;
+  std::cin >> str_iv;
+  byte_grid_t iv = parse_grid(str_iv);
+  std::cout << "Introduzca la clave como secuencia de cifras decimales: ";
+  std::string str_key;
+  std::cin >> str_key;
+  byte_grid_t key = parse_grid(str_key);
+  std::cout
+      << "\n Bloques de texto plano origen: \n\n";
+  std::vector<byte_grid_t> ptexts;
+  while (1)
   {
-    return flag;
+    std::cout << "Introduzca el texto original como secuencia de cifras decimales: ";
+    std::string ptxt;
+    std::cin >> ptxt;
+    ptexts.push_back(parse_grid(ptxt));
+
+    std::cout << "¿Quiere añadir otro texto plano? (s/n)";
+    std::string opt;
+    std::cin >> opt;
+    if (opt == "n")
+      break;
   }
 
-  bool trace = (std::string{argv[argc - 1]} == "trace");
-
-  std::cout << "--- Encriptado CBC con AES de 128 b --- \n";
-  std::cout << "\n Bloques de texto plano origen: \n\n";
-
-  for (int i = 3; i < (trace ? (argc - 1) : (argc)); ++i)
-    print_grid(parse_grid(argv[i]));
-
+  std::cout << "¿Desea mostrar la traza del proceso? (s/n): ";
+  std::string trace;
+  std::cin >> trace;
   //// --- CBC proccess ---
 
   byte_grid_t input;
   std::vector<byte_grid_t> ciph_text;
 
   // XOR between plaintext and corresponding element
-  for (int i = 3; i < (trace ? (argc - 1) : (argc)); ++i)
+  for (unsigned i = 0; i < ptexts.size(); ++i)
   {
-    if (i == 3) // First round with initialization vector (IV)
+    if (i == 0) // First round with initialization vector (IV)
     {
-
-      input = CBC_XOR(parse_grid(argv[i]), parse_grid(argv[1]), trace);
+      input = CBC_XOR(ptexts[i], iv, trace == "s");
     }
-    if (i > 3) // The rest of the rounds AES input block contains the previous Ciphertext
+    if (i > 0) // The rest of the rounds AES input block contains the previous Ciphertext
     {
-      input = CBC_XOR(parse_grid(argv[i]), ciph_text.back(), trace);
+      input = CBC_XOR(ptexts[i], ciph_text.back(), trace == "s");
     }
 
-    AES_128 my_aes_obj(input, parse_grid(argv[2]));
+    AES_128 my_aes_obj(input, key);
     //// Trace is printed by passing boolean value which depends on the command line input
-    ciph_text.push_back(my_aes_obj.generate(trace));
+    ciph_text.push_back(my_aes_obj.generate(trace == "s"));
   }
   // Result grid operation by generating AES
 
@@ -50,7 +66,6 @@ int cbc(int argc, char *argv[])
     std::cout << "Bloque " << i + 1 << " de tetxo cifrado:\n";
     print_grid(ciph_text[i]);
   }
-  return 0;
 }
 
 byte_grid_t CBC_XOR(const byte_grid_t &plaintext, const byte_grid_t &element, const bool &trace)

@@ -12,6 +12,10 @@
 #include "../include/rc4_simulation.h"
 #include "../include/chacha20_simulation.h"
 #include "../include/ca_gps_simulation.h"
+#include "../include/binary_mult_simulation.h"
+#include "../include/aes_simulation.h"
+#include "../include/cbc_simulation.h"
+#include "../include/gamal_simulation.h"
 #include <iostream>
 
 int main(int argc, char *argv[])
@@ -59,15 +63,19 @@ int main(int argc, char *argv[])
                /* code */
                break;
           case 5:
+               binary();
                /* code */
                break;
           case 6:
+               aes();
                /* code */
                break;
           case 7:
+               cbc();
                /* code */
                break;
           case 8:
+               elgamal();
                /* code */
                break;
           case 9:

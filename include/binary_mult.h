@@ -1,4 +1,6 @@
 
+#pragma once
+
 #include <iostream>
 #include <sstream>
 #include <stdio.h>
@@ -13,70 +15,16 @@ enum algortihm
   S3G
 };
 
-/**
- * @brief Checks the program command line input. If the input is the desired returns 0
- * and the main program can proceed.
- * 
- * @param argc 
- * @param argv 
- * @return int 
- */
-
-int filter(int argc, char *argv[])
+int bcheck(const std::string &input)
 {
 
-  if (argc < 4)
+  if (input.size() != 4)
   {
-    std::cout << "ERROR: wrong execution input\n";
-    std::cout << "USAGE: " << argv[0] << " <aes/s3g> <num1> <num2> [trace]\n";
+    std::cout << "ERROR: la cadena debe componerse por 2 cifras hexadecimales y estar precedida por 0x\n";
     return 1;
   }
 
-  if (std::string{argv[1]} != "aes" &&
-      std::string{argv[1]} != "s3g")
-  {
-    std::cout << "ERROR: unknown algorithm byte input - "
-                 "introduced "
-              << argv[1] << "\n";
-    std::cout << "USAGE: " << argv[0] << " <aes/s3g> <num1> <num2> [trace]\n";
-    return 2;
-  }
-
-  if (std::string{argv[2]}.substr(0, 2) != "0x")
-  {
-    std::cout << "ERROR: expected hex format in numbers - "
-                 "introduced "
-              << argv[2] << " - expected 0xXX\n";
-    std::cout << "USAGE: " << argv[0] << " <aes/s3g> <num1> <num2> [trace]\n";
-    return 3;
-  }
-
-  if (std::string{argv[3]}.substr(0, 2) != "0x")
-  {
-    std::cout << "ERROR: expected hex format in numbers - "
-                 "introduced "
-              << argv[3] << " - expected 0xYY\n";
-    std::cout << "USAGE: " << argv[0] << " <aes/s3g> <num1> <num2> [trace]\n";
-    return 4;
-  }
-
-  if (std::string{argv[2]}.size() != 4)
-  {
-    std::cout << "ERROR: expected hex number of 8 bits - "
-                 "introduced "
-              << argv[2] << " - expected 0xXX\n";
-    std::cout << "USAGE: " << argv[0] << " <aes/s3g> <num1> <num2> [trace]\n";
-    return 5;
-  }
-
-  if (std::string{argv[3]}.size() != 4)
-  {
-    std::cout << "ERROR: expected hex number of 8 bits - "
-                 "introduced "
-              << argv[3] << " - expected 0xYY\n";
-    std::cout << "USAGE: " << argv[0] << " <aes/s3g> <num1> <num2> [trace]\n";
-    return 6;
-  }
+  /* CASES */
 
   return 0;
 }

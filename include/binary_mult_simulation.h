@@ -1,28 +1,40 @@
 #include "binary_mult.h"
 
-int binary(int argc, char *argv[])
+void binary(void)
 {
-  int flag = filter(argc, argv);
-  if (flag != 0)
+
+  std::cout << "\n\n---- MULTIPLICACIÓN EN SNOW3G Y AES ----\n\n";
+
+  std::cout << "Introduzca el algoritmo de cifrado para el que generar la multiplicación (aes/s3g): ";
+  std::string alg;
+  std::cin >> alg;
+  std::cout << "Introduzca el primer valor en hexadecimal empleando el formato 0x00: ";
+  std::string hex1;
+  std::cin >> hex1;
+  if (bcheck(hex1) != 0)
   {
-    return flag;
+    return;
+  }
+  std::cout << "Introduzca el segundo valor en hexadecimal empleando el formato 0x00: ";
+  std::string hex2;
+  std::cin >> hex2;
+  if (bcheck(hex2) != 0)
+  {
+    return;
   }
 
-  if (std::string{argv[1]} == "aes")
-    std::cout << "\n---- P05 AES MULT ----\n";
-  else
-    std::cout << "\n---- P05 SNOW 3G MULT ----\n";
-
-  uint8_t a = std::stoi(std::string{argv[2]}.substr(2, 2), 0, 16);
-  uint8_t b = std::stoi(std::string{argv[3]}.substr(2, 2), 0, 16);
+  uint8_t a = std::stoi(hex1.substr(2, 2), 0, 16);
+  uint8_t b = std::stoi(hex2.substr(2, 2), 0, 16);
   uint8_t prod;
-  if (argc == 5 && std::string{argv[4]} == "trace")
-    prod = std::string{argv[1]} == "aes" ? byte_mul(a, b, AES, true) : byte_mul(a, b, S3G, true);
+  std::cout << "¿desea aplicar la traza? (s/n): ";
+  std::string trace;
+  std::cin >> trace;
+  if (trace == "s")
+    prod = alg == "aes" ? byte_mul(a, b, AES, true) : byte_mul(a, b, S3G, true);
   else
-    prod = std::string{argv[1]} == "aes" ? byte_mul(a, b, AES) : byte_mul(a, b, S3G);
+    prod = alg == "aes" ? byte_mul(a, b, AES) : byte_mul(a, b, S3G);
 
-  std::cout << "result :";
+  std::cout << "Resultado de la multiplicación: ";
   byte_print(prod);
   std::cout << "\n";
-  return 0;
 }
